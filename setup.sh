@@ -6,9 +6,9 @@ make -j 4
 cd ../../
 
 # Compile annotated bitcodes
-cd src/brian
-./scripts/bitcode.sh
-cd ../..
+#cd src/brian
+#./scripts/bitcode.sh
+#cd ../..
 
 # build noelle branch
 cd noelle

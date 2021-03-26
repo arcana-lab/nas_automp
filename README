@@ -1,0 +1,13 @@
+# Framework for OMP + NOELLE
+
+Files:
+download.sh - Clones the automp frontend from github and noelle+OMP branch from peroni
+
+setup.sh - Builds AutoMP then builds noelle+OMP then patches to remove instcombine
+
+src/brian/scripts/bitcode.sh - compiles .ll files and moves them into benchmark dir (CLASS C) NOTE: expect automp in PATH
+
+bitcode/copy_bitcode.sh - copies existing CLASS B bitcode to benchmark dir
+
+
+
