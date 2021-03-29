@@ -5,9 +5,16 @@ download.sh - Clones the automp frontend from github and noelle+OMP branch from 
 
 setup.sh - Builds AutoMP then builds noelle+OMP then patches to remove instcombine
 
+# For generating new bitcode (Class C)
 src/brian/scripts/bitcode.sh - compiles .ll files and moves them into benchmark dir (CLASS C) NOTE: expect automp in PATH
+export PATH=path/to/nas_automp/openmp/llvm/install/bin:$PATH
+cd src/brian
+./scripts/bitcode.sh
 
+# For existing bitcode (class B):
 bitcode/copy_bitcode.sh - copies existing CLASS B bitcode to benchmark dir
+cd bitcode
+./copy_bitcode.sh
 
 
 
