@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROFILER="1";
+PROFILER="0";
 
 BITCODE=$1
 NOELLE_INSTALL=$(noelle-config);
@@ -18,13 +18,14 @@ noelleDir=`realpath $noelleDir` ;
 echo $noelleDir ;
 ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
 
-INCLUDES=-Iinclude/threadpool/include
-
 # Runtime
 RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
 RUNTIME_CFLAGS="-DNDEBUG"
 RUNTIME=Parallelizer_utils
+NAUTILUS="/nfs-scratch/simonec/interweaving/openmp/nautilus"
+INCLUDES="-I${NAUTILUS}/include -I${NAUTILUS}/include/rt/virgil"
+NAUTILUS_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -mcmodel=large"
 
 mkdir -p include
 cd include 
@@ -39,7 +40,7 @@ echo "OUTLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outliner -outline-annotation=\"critical 1\" ${BITCODE}_split.bc -o ${BITCODE}_outlined.bc 
 
 echo "LINKING WITH RUNTIME"
-clang++ "-DNDEBUG" -Iinclude/threadpool/include -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
+clang++ "-DNDEBUG" ${INCLUDES} -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
 llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 
 echo "NOELLE-NORM"
@@ -93,4 +94,6 @@ echo "NOELLE-PARALLELIZER"
 noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELIZATION_OPTIONS}
 
 echo "FINAL BUILD"
-clang ${BITCODE}_parallel.bc -lm -lpthread -lstdc++ -O3 -march=native -o parallelized_binary
+llvm-dis ${BITCODE}_parallel.bc ;
+sed -i 's/@main/@smain/g' ${BITCODE}_parallel.ll
+clang -c -O3 ${BITCODE}_parallel.ll -lm $NAUTILUS_FLAGS -o parallelized.o
