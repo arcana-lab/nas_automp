@@ -4,5 +4,6 @@ clean:
 	rm -f baseline* ;
 	rm -f parallelized_binary ;
 	rm -f default*
+	rm -rf include
 
 .PHONY: clean
