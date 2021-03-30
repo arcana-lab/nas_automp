@@ -407,7 +407,7 @@ int main(int argc, char **argv) {
 
 #pragma omp parallel for default(shared) private(i)
 #pragma note noelle independent = 1 selected = 1 label = 1
-    for (i = 0; i < 2*NK; i++) x[i] = -1.0e99;
+  for (i = 0; i < 2*NK; i++) x[i] = -1.0e99;
 
   Mops = log(sqrt(fabs(max(1.0, 1.0))));
 
@@ -446,6 +446,8 @@ int main(int argc, char **argv) {
 #pragma omp parallel copyin(x)
 #pragma note noelle independent = 1
   {
+    double /*t1,*/ t2, t3, t4, x1, x2;
+    int kk, i, ik, l;
     //    double qq[NQ];		/* private copy of q[0:NQ-1] */
     double v0 = 0.0;
     double v1 = 0.0;
@@ -501,8 +503,11 @@ int main(int argc, char **argv) {
     for (k = 1; k <= np; k++) {
 
       // BRIAN: BELOW;
+    //  double t1;
+    // new <<
       double t1, t2, t3, t4, x1, x2;
       int kk, i, ik, l;
+    // new >>
       double xBrian[2*NK];
       for (i = 0; i < 2*NK; i++) xBrian[i] = x[i]; //x[i] = -1.0e99;
       // BRIAN ABOVE
@@ -525,32 +530,32 @@ int main(int argc, char **argv) {
 
       if (TIMERS_ENABLED == TRUE) timer_start(3);
       /// BRIAN BELOW VRANLC inline
-      {
+/*      {
         int i;
-        double xNew,t1New,t2,t3,t4,a1,a2,x1,x2,z;
+        double xNew,t1,t2,t3,t4,a1,a2,x1,x2,z;
 
-        t1New = r23 * A;
-        a1 = (int)t1New;
+        t1 = r23 * A;
+        a1 = (int)t1;
         a2 = A - t23 * a1; 
         xNew = t1;
 
         for (i = 0; i < 2*NK; i++) {
 
-          t1New = r23 * xNew;
-          x1 = (int)t1New;
+          t1 = r23 * xNew;
+          x1 = (int)t1;
           x2 = xNew - t23 * x1; 
-          t1New = a1 * x2 + a2 * x1; 
-          t2 = (int)(r23 * t1New);
-          z = t1New - t23 * t2; 
+          t1 = a1 * x2 + a2 * x1; 
+          t2 = (int)(r23 * t1);
+          z = t1 - t23 * t2; 
           t3 = t23 * z + a2 * x2; 
           t4 = (int)(r46 * t3);
           xNew = t3 - t46 * t4; 
           xBrian[i] = r46 * xNew;
         }
         t1 = xNew;
-      }
+      }*/
       //BRIAN  ABOVE VRANLC inline
-//            vranlc(2*NK, &t1, A, x-1);
+            vranlc(2*NK, &t1, A, xBrian-1);
       if (TIMERS_ENABLED == TRUE) timer_stop(3);
 
       /*
