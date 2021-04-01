@@ -88,6 +88,6 @@ echo "NOELLE-PARALLELIZER"
 noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELIZATION_OPTIONS}
 
 echo "FINAL BUILD"
-clang ${BITCODE}_parallel.bc -static -fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large -lm -lpthread -lstdc++ -o parallelized_binary
+clang ${BITCODE}_parallel.bc -fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large -lm -lpthread -lstdc++ -o parallelized_binary
 #clang ${BITCODE}_parallel.bc -lm -lpthread -lstdc++ -O3 -march=native -o parallelized_binary
 
