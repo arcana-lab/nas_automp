@@ -90,4 +90,4 @@ noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELI
 echo "FINAL BUILD"
 llvm-dis ${BITCODE}_parallel.bc ;
 sed -i 's/@main/@smain/g' ${BITCODE}_parallel.ll
-clang -c -O3 ${BITCODE}_parallel.ll -lm $NAUTILUS_FLAGS -o parallelized.o
+clang -c -O3 ${BITCODE}_parallel.ll $NAUTILUS_FLAGS -o parallelized.o
