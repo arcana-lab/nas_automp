@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROFILER="1";
+PROFILER="0";
 
 BITCODE=$1
 NOELLE_INSTALL=$(noelle-config);
