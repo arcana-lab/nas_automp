@@ -15,5 +15,7 @@ cd noelle
 make
 # patch the instcombine
 cd install/bin
-sed -i 's/-instcombine//g' noelle-simplification 
+cp ../../../patches/noelle-pre-FT .
+cp ../../../patches/noelle-simplification-FT .
+#sed -i 's/-instcombine//g' noelle-simplification 
 
