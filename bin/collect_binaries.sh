@@ -39,4 +39,5 @@ for i in `ls` ; do
     cp "$llFileName" ${dstDir}/${i}.bc ;
   fi
   cp "${i}/compiler_output.txt" "${dstDir}/${i}_compiler_output.txt" ;
+  cp "${i}/parallelized_binary" "${dstDir}/${i}_binary" ;
 done
