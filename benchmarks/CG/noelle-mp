@@ -18,6 +18,10 @@ ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
 
 INCLUDES=-Iinclude/threadpool/include
 
+# Back-end flags
+BACKEND_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large"
+LIBRARIES="-lm -lpthread -lstdc++"
+
 # Runtime
 RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
@@ -53,9 +57,9 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_norm.bc -o ${BITCODE}_prof.bc
-else 
-  cp ${BITCODE}_norm.bc ${BITCODE}_prof.bc
 
+else
+  cp ${BITCODE}_norm.bc ${BITCODE}_prof.bc
 fi
 
 echo "NOELLE-PRE"
@@ -79,10 +83,11 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_clean.bc -o ${BITCODE}_prof.bc
+
 else
   cp ${BITCODE}_clean.bc ${BITCODE}_prof.bc
-
 fi
+
 echo "NOELLE-META-PDG-EMBED"
 noelle-meta-pdg-embed ${BITCODE}_prof.bc -o ${BITCODE}_pdg_prof.bc
 
@@ -90,5 +95,5 @@ echo "NOELLE-PARALLELIZER"
 noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELIZATION_OPTIONS}
 
 echo "FINAL BUILD"
-#clang ${BITCODE}_parallel.bc -lm -lpthread -lstdc++ -O3 -march=native -o parallelized_binary
-clang ${BITCODE}_parallel.bc -fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large -lm -lpthread -lstdc++     -O3  -o parallelized_binary
+clang -c ${BITCODE}_parallel.bc ${BACKEND_FLAGS} -o parallelized.o
+clang parallelized.o ${BACKEND_FLAGS} ${LIBRARIES} -o parallelized_binary
