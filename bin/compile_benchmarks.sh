@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH=`pwd`/openmp/llvm/install/bin:$PATH
+export PATH=`pwd`/patches:$PATH
 
 pushd ./ ;
 cd src/brian ; 
