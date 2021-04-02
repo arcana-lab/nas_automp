@@ -49,6 +49,7 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_norm.bc -o ${BITCODE}_prof.bc
+
 else
   cp ${BITCODE}_norm.bc ${BITCODE}_prof.bc
 fi
@@ -75,6 +76,7 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_clean.bc -o ${BITCODE}_prof.bc
+
 else
   cp ${BITCODE}_clean.bc ${BITCODE}_prof.bc
 fi
