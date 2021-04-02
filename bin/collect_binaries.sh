@@ -28,7 +28,15 @@ for i in `ls` ; do
   fi
   echo "$i" ;
   cp "${i}/parallelized.o" ${dstDir}/${i}.o ;
-  llFileName="`ls ${i}/*parallel.ll`" ;
-  cp "$llFileName" ${dstDir}/${i}.ll ;
+  ls ${i}/*parallel.ll &> /dev/null ;
+  if test $? -eq 0 ; then
+    llFileName="`ls ${i}/*parallel.ll`" ;
+    cp "$llFileName" ${dstDir}/${i}.ll ;
+  fi
+  ls ${i}/*parallel.bc &> /dev/null ;
+  if test $? -eq 0 ; then
+    llFileName="`ls ${i}/*parallel.bc`" ;
+    cp "$llFileName" ${dstDir}/${i}.bc ;
+  fi
   cp "${i}/compiler_output.txt" "${dstDir}/${i}_compiler_output.txt" ;
 done
