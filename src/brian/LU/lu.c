@@ -3337,6 +3337,10 @@ c  local variables
 #pragma omp for
   #pragma note noelle selected = 1 label = 27
   for (j = 0; j < ny; j++) {
+
+  double  ue_1jk[5],ue_nx0jk[5],ue_i1k[5],
+    ue_iny0k[5],ue_ij1[5],ue_ijnz[5];
+
     jglob = j;
     for (k = 1; k < nz - 1; k++) {
       zeta = ((double)k) / (nz-1);
