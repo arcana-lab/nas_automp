@@ -28,6 +28,7 @@ RUNTIME=Parallelizer_utils
 NAUTILUS="/nfs-scratch/simonec/interweaving/openmp/nautilus"
 INCLUDES="-I${NAUTILUS}/include -I${NAUTILUS}/include/rt/virgil"
 NAUTILUS_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -mcmodel=large"
+NAUTILUS_CXXFLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -g -m64 -mcmodel=large"
 
 # BITCODE has runtime and is annotated
 echo "SPLITING FOR TALKDOWN"
@@ -36,7 +37,7 @@ echo "OUTLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outliner -outline-annotation=\"critical 1\" ${BITCODE}_split.bc -o ${BITCODE}_outlined.bc 
 
 echo "LINKING WITH RUNTIME"
-clang++ "-DNDEBUG" ${INCLUDES} -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
+clang++ "-DNDEBUG" ${INCLUDES} $NAUTILUS_CXXFLAGS -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
 llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 
 echo "NOELLE-NORM"
@@ -59,8 +60,6 @@ fi
 echo "NOELLE-PRE"
 noelle-pre ${BITCODE}_prof.bc ${NOELLE_OPTIONS}
 
-#Inline our outlined
-#cp ${BITCODE}_prof.bc ${BITCODE}_inlined.bc
 echo "OUTLINED INLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outlined-inliner ${BITCODE}_prof.bc -o ${BITCODE}_inlined.bc
 
