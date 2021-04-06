@@ -41,7 +41,7 @@ echo "OUTLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outliner -outline-annotation=\"critical 1\" ${BITCODE}_split.bc -o ${BITCODE}_outlined.bc 
 
 echo "LINKING WITH RUNTIME"
-clang++ "-DNDEBUG" -Iinclude/threadpool/include -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
+clang++ "-DNDEBUG" ${INCLUDES} -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
 llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 
 echo "NOELLE-NORM"

@@ -39,7 +39,7 @@ echo "OUTLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outliner -outline-annotation=\"critical 1\" ${BITCODE}_split.bc -o ${BITCODE}_outlined.bc 
 
 echo "LINKING WITH RUNTIME"
-clang++ "-DNDEBUG" -Iinclude/threadpool/include -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
+clang++ "-DNDEBUG" ${INCLUDES} -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
 llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 
 echo "NOELLE-NORM"
@@ -54,6 +54,7 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_norm.bc -o ${BITCODE}_prof.bc
+
 else
   cp ${BITCODE}_norm.bc ${BITCODE}_prof.bc
 fi
@@ -80,6 +81,7 @@ if test $PROFILER == "1" ; then
 
   echo "NOELLE-META-PROF-EMBED"
   noelle-meta-prof-embed default.profraw ${BITCODE}_clean.bc -o ${BITCODE}_prof.bc
+
 else
   cp ${BITCODE}_clean.bc ${BITCODE}_prof.bc
 fi
@@ -91,5 +93,4 @@ echo "NOELLE-PARALLELIZER"
 noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELIZATION_OPTIONS}
 
 echo "FINAL BUILD"
-#clang ${BITCODE}_parallel.bc -lm -lpthread -lstdc++ -O3 -march=native -o parallelized_binar
 clang ${BITCODE}_parallel.bc -fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow     -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large -lm -lpthread -lstdc++     -O3  -o parallelized_binary
