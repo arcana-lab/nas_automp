@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-installDir="/home/bdh2903/repo/nas_automp/noelle/install"
+installDir="`noelle-config`" ;
 
 # Partition the arguments between options and not
 options="" ;
