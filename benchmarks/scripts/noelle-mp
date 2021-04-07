@@ -19,6 +19,7 @@ echo $noelleDir ;
 ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
 
 # Runtime
+LIBRARIES=""
 RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
 RUNTIME_CFLAGS="-DNDEBUG"
