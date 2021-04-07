@@ -65,7 +65,6 @@ noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outlined-inliner ${BITCOD
 
 echo "NOELLE-META-CLEAN"
 noelle-meta-clean ${BITCODE}_inlined.bc ${BITCODE}_clean.bc
-#TODO: Check that the meta-clean does not remove the meta data we care about
 
 if test $PROFILER == "1" ; then
   echo "NOELLE-PROF-COVERAGE 2"

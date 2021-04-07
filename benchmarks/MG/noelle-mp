@@ -1,12 +1,14 @@
 #!/bin/bash
 
+PROFILER="0";
+
 BITCODE=$1
 NOELLE_INSTALL=$(noelle-config);
 echo $NOELLE_INSTALL
 
 NOELLE_OPTIONS="-noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp -noelle-disable-doall"
 
-PARALLELIZATION_OPTIONS="-noelle-max-cores=64 -noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0     -noelle-disable-helix -noelle-disable-dswp"
+PARALLELIZATION_OPTIONS="-noelle-max-cores=64 -noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp"
 
 noelleBin="`which noelle-config`";
 noelleDir=`dirname $noelleBin`/../../ ;
@@ -41,14 +43,20 @@ llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 echo "NOELLE-NORM"
 noelle-norm ${BITCODE}_runtime.bc -o ${BITCODE}_norm.bc
 
-echo "NOELLE-PROF-COVERAGE"
-noelle-prof-coverage ${BITCODE}_norm.bc baseline_pre_prof -lm -lpthread -lstdc++
+if test $PROFILER == "1" ; then
+  echo "NOELLE-PROF-COVERAGE"
+  noelle-prof-coverage ${BITCODE}_norm.bc baseline_pre_prof -lm -lpthread -lstdc++
 
-echo "RUN BASELINE_PRE_PROF"
-./baseline_pre_prof ${INPUTS}
+  echo "RUN BASELINE_PRE_PROF"
+  ./baseline_pre_prof ${INPUTS}
 
-echo "NOELLE-META-PROF-EMBED"
-noelle-meta-prof-embed default.profraw ${BITCODE}_norm.bc -o ${BITCODE}_prof.bc
+  echo "NOELLE-META-PROF-EMBED"
+  noelle-meta-prof-embed default.profraw ${BITCODE}_norm.bc -o ${BITCODE}_prof.bc
+
+else
+  cp ${BITCODE}_norm.bc ${BITCODE}_prof.bc
+fi
+
 echo "NOELLE-PRE"
 noelle-pre ${BITCODE}_prof.bc ${NOELLE_OPTIONS}
 
@@ -57,16 +65,20 @@ noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outlined-inliner ${BITCOD
 
 echo "NOELLE-META-CLEAN"
 noelle-meta-clean ${BITCODE}_inlined.bc ${BITCODE}_clean.bc
-#TODO: Check that the meta-clean does not remove the meta data we care about
 
-echo "NOELLE-PROF-COVERAGE 2"
-noelle-prof-coverage ${BITCODE}_clean.bc baseline_post_prof -lm -lpthread -lstdc++
+if test $PROFILER == "1" ; then
+  echo "NOELLE-PROF-COVERAGE 2"
+  noelle-prof-coverage ${BITCODE}_clean.bc baseline_post_prof -lm -lpthread -lstdc++
 
-echo "RUN BASELINE_POST_PROF"
-./baseline_post_prof ${INPUTS}
+  echo "RUN BASELINE_POST_PROF"
+  ./baseline_post_prof ${INPUTS}
 
-echo "NOELLE-META-PROF-EMBED"
-noelle-meta-prof-embed default.profraw ${BITCODE}_clean.bc -o ${BITCODE}_prof.bc
+  echo "NOELLE-META-PROF-EMBED"
+  noelle-meta-prof-embed default.profraw ${BITCODE}_clean.bc -o ${BITCODE}_prof.bc
+
+else
+  cp ${BITCODE}_clean.bc ${BITCODE}_prof.bc
+fi
 
 echo "NOELLE-META-PDG-EMBED"
 noelle-meta-pdg-embed ${BITCODE}_prof.bc -o ${BITCODE}_pdg_prof.bc
