@@ -18,11 +18,8 @@ noelleDir=`realpath $noelleDir` ;
 echo $noelleDir ;
 ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
 
-# Back-end flags
-BACKEND_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large"
-LIBRARIES="-lm -lpthread -lstdc++"
-
 # Runtime
+LIBRARIES=""
 RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
 RUNTIME_CFLAGS="-DNDEBUG"
