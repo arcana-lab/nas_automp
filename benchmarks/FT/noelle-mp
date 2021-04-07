@@ -20,15 +20,14 @@ ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
 
 INCLUDES=-Iinclude/threadpool/include
 
-# Back-end flags
-BACKEND_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -O3 -mcmodel=large"
-LIBRARIES="-lm -lpthread -lstdc++"
-
 # Runtime
+LIBRARIES="-lm -lpthread -lstdc++"
 RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
 RUNTIME_CFLAGS="-DNDEBUG"
 RUNTIME=Parallelizer_utils
+NAUTILUS_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -mcmodel=large"
+NAUTILUS_CXXFLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -g -m64 -mcmodel=large"
 
 mkdir -p include
 cd include 
@@ -43,7 +42,7 @@ echo "OUTLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outliner -outline-annotation=\"critical 1\" ${BITCODE}_split.bc -o ${BITCODE}_outlined.bc 
 
 echo "LINKING WITH RUNTIME"
-clang++ "-DNDEBUG" ${INCLUDES} -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
+clang++ "-DNDEBUG" ${INCLUDES} $NAUTILUS_CXXFLAGS -std=c++14 -emit-llvm -O3 -c ${RUNTIME}.cpp -o ${RUNTIME}.bc
 llvm-link ${BITCODE}_outlined.bc ${RUNTIME}.bc -o ${BITCODE}_runtime.bc
 
 echo "NOELLE-NORM"
@@ -67,8 +66,6 @@ echo "NOELLE-PRE"
 cp ${BITCODE}_prof.bc noelle-pre.input.bc
 noelle-pre-FT ${BITCODE}_prof.bc ${NOELLE_OPTIONS}
 
-#Inline our outlined
-#cp ${BITCODE}_prof.bc ${BITCODE}_inlined.bc
 echo "OUTLINED INLINING"
 noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outlined-inliner ${BITCODE}_prof.bc -o ${BITCODE}_inlined.bc
 
@@ -97,5 +94,6 @@ echo "NOELLE-PARALLELIZER"
 noelle-parallelizer ${BITCODE}_pdg_prof.bc -o ${BITCODE}_parallel.bc ${PARALLELIZATION_OPTIONS}
 
 echo "FINAL BUILD"
-clang -c ${BITCODE}_parallel.bc ${BACKEND_FLAGS} -o parallelized.o
-clang parallelized.o ${BACKEND_FLAGS} ${LIBRARIES} -o parallelized_binary
+llvm-dis ${BITCODE}_parallel.bc ;
+clang -c -O3 ${BITCODE}_parallel.bc ${NAUTILUS_FLAGS} -o parallelized.o
+clang -O3 parallelized.o ${NAUTILUS_FLAGS} ${LIBRARIES} -o parallelized_binary
