@@ -6,7 +6,7 @@ BITCODE=$1
 NOELLE_INSTALL=$(noelle-config);
 echo $NOELLE_INSTALL
 
-NOELLE_OPTIONS="-noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp -noelle-disable-doall"
+NOELLE_OPTIONS="-noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp -noelle-disable-doall -noelle-disable-inliner "
 
 PARALLELIZATION_OPTIONS="-noelle-max-cores=64 -noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp"
 
@@ -15,7 +15,6 @@ noelleDir=`dirname $noelleBin`/../../ ;
 noelleDir=`realpath $noelleDir` ;
 echo $noelleDir ;
 ln -s ${noelleDir}/src/core/runtime/Parallelizer_utils.cpp
-
 
 # Runtime
 LIBRARIES="-lm -lpthread -lstdc++"
