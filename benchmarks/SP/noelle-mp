@@ -6,7 +6,7 @@ BITCODE=$1
 NOELLE_INSTALL=$(noelle-config);
 echo $NOELLE_INSTALL
 
-NOELLE_OPTIONS="-noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp -noelle-disable-doall -noelle-disable-inliner"
+NOELLE_OPTIONS="-noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp -noelle-disable-doall -noelle-disable-inliner -noelle-disable-whilifier"
 
 PARALLELIZATION_OPTIONS="-noelle-max-cores=64 -noelle-verbose=3 -noelle-pdg-verbose=1 -noelle-min-hot=0 -noelle-disable-helix -noelle-disable-dswp"
 
@@ -67,7 +67,6 @@ noelle-load -load $NOELLE_INSTALL/lib/OutlinerPass.so -outlined-inliner ${BITCOD
 
 echo "NOELLE-META-CLEAN"
 noelle-meta-clean ${BITCODE}_inlined.bc ${BITCODE}_clean.bc
-#TODO: Check that the meta-clean does not remove the meta data we care about
 
 if test $PROFILER == "1" ; then
   echo "NOELLE-PROF-COVERAGE 2"
