@@ -481,7 +481,6 @@ static void add(void) {
     c addition of update to the vector u
     c-------------------------------------------------------------------*/
 #pragma omp for
-#pragma note noelle selected = 1 independent = 1 label = 1
   for (m = 0; m < 5; m++) {
     for (i = 1; i <= grid_points[0]-2; i++) {
       for (j = 1; j <= grid_points[1]-2; j++) {
@@ -1148,7 +1147,6 @@ static void lhsinit(void) {
     c-------------------------------------------------------------------*/
   for (n = 0; n < 15; n++) {
 #pragma omp for nowait
-#pragma note noelle selected = 1 independent = 1 label = 2
     for (i = 0; i < grid_points[0]; i++) {
       for (j = 0; j < grid_points[1]; j++) {
         for (k = 0; k < grid_points[2]; k++) {
@@ -1165,7 +1163,6 @@ static void lhsinit(void) {
     c-------------------------------------------------------------------*/
   for (n = 0; n < 3; n++) {
 #pragma omp for    
-#pragma note noelle selected = 1 independent = 1 label = 3
     for (i = 0; i < grid_points[0]; i++) {
       for (j = 0; j < grid_points[1]; j++) {
         for (k = 0; k < grid_points[2]; k++) {
@@ -1552,7 +1549,7 @@ static void ninvr(void) {
   int i, j, k;
   double r1, r2, r3, r4, r5, t1, t2;
 #pragma omp parallel for default(shared) private(i,j,k,r1,r2,r3,r4,r5,t1,t2)
-#pragma note noelle independent = 1 selected = 1 independent = 1 label = 22
+#pragma note noelle independent = 1    independent = 1 label = 22
   for (i = 1; i <= grid_points[0]-2; i++) {
     for (j = 1; j <= grid_points[1]-2; j++) {
       for (k = 1; k <= grid_points[2]-2; k++) {
@@ -1592,7 +1589,6 @@ static void pinvr(void) {
   double r1, r2, r3, r4, r5, t1, t2;
 
 #pragma omp parallel for default(shared) private(i,j,k,r1,r2,r3,r4,r5,t1,t2)
-#pragma note noelle independent = 1 selected = 1 independent = 1 label = 23
   for (i = 1; i <= grid_points[0]-2; i++) {
     for (j = 1; j <= grid_points[1]-2; j++) {
       for (k = 1; k <= grid_points[2]-2; k++) {
@@ -2298,7 +2294,6 @@ static void txinvr(void) {
          r4, r5, ac2inv;
 
 #pragma omp for  
-#pragma note noelle selected = 1 independent = 1 label = 45
   for (i = 1; i <= grid_points[0]-2; i++) {
     for (j = 1; j <= grid_points[1]-2; j++) {
       for (k = 1; k <= grid_points[2]-2; k++) {
@@ -2348,7 +2343,6 @@ static void tzetar(void) {
          r4, r5, btuz, acinv, ac2u, uzik1;
 
 #pragma omp for private(i,j,k,t1,t2,t3,ac,xvel,yvel,zvel,r1,r2,r3,r4,r5,btuz,ac2u,uzik1)
-#pragma note noelle selected = 1 independent = 1 label = 46
   for (i = 1; i <= grid_points[0]-2; i++) {
     for (j = 1; j <= grid_points[1]-2; j++) {
       for (k = 1; k <= grid_points[2]-2; k++) {
