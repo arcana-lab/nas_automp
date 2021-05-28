@@ -24,7 +24,7 @@ RUNTIME_DIRNAME="threadpool"
 RUNTIME_GITREPO="https://github.com/scampanoni/virgil.git"
 RUNTIME_CFLAGS="-DNDEBUG"
 RUNTIME=Parallelizer_utils
-NAUTILUS="/nfs-scratch/simonec/interweaving/openmp/nautilus"
+NAUTILUS="/nfs-scratch/simonec/interweaving/openmp/nautilus-kmp"
 INCLUDES="-I${NAUTILUS}/include -I${NAUTILUS}/include/rt/virgil"
 NAUTILUS_FLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -fgnu89-inline -g -m64 -mcmodel=large"
 NAUTILUS_CXXFLAGS="-fno-omit-frame-pointer -ffreestanding -fno-stack-protector -fno-strict-aliasing -fno-strict-overflow -mno-red-zone -fno-common -g -m64 -mcmodel=large"
