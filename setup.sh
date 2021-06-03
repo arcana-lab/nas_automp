@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build automp
-cd openmp/llvm
+cd automp-frontend/llvm
 make -j 4
 cd ../../
 
