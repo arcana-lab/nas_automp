@@ -8,7 +8,7 @@ cd src/brian ;
 ./scripts/bitcode.sh
 popd ;
 
-source 'pwd'/noelle_linux/enable
+export PATH=`pwd`/noelle_linux/install/bin:$PATH
 
 cd benchmarks ; 
 for i in `ls` ; do

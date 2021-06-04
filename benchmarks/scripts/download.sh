@@ -20,4 +20,4 @@ fi
 
 # Clone the repository
 echo "Cloning ${hostAndDir}" ;
-git clone "${hostAndDir}" "$destDir" ;
+git clone --single-branch --branch MultiQueue "${hostAndDir}" "$destDir" ;
