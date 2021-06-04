@@ -11,7 +11,7 @@ cd ../../
 #cd ../..
 
 # build noelle branch
-cd noelle
+cd noelle_linux
 make
 # patch the instcombine
 cd install/bin
