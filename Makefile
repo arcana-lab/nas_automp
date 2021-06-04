@@ -1,5 +1,6 @@
 all:
 	./download.sh
 	./setup.sh
-	./compile_benchmarks.sh
+	./bin/compile_benchmarks.sh
+	
 
