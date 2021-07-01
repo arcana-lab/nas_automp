@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm -rf automp-frontend noelle ;
+rm -rf automp-frontend noelle* ;
