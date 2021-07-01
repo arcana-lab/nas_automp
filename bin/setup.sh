@@ -1,16 +1,18 @@
 #!/bin/bash
 
-# Build automp
+# Build AutoMP
+pushd ./ ;
 cd automp-frontend/llvm
 make -j 4
-cd ../../
+popd ;
 
 # Compile annotated bitcodes
 #cd src/brian
 #./scripts/bitcode.sh
 #cd ../..
 
-# build noelle branch
+# Build NOELLE for Linux
+pushd ./ ;
 cd noelle_linux
 make
 # patch the instcombine
@@ -18,4 +20,14 @@ cd install/bin
 cp ../../../patches/noelle-pre-FT .
 cp ../../../patches/noelle-simplification-FT .
 #sed -i 's/-instcombine//g' noelle-simplification 
+popd ;
 
+# Build NOELLE for Nautilus
+pushd ./ ;
+cd noelle_nautilus
+make
+# patch the instcombine
+cd install/bin
+cp ../../../patches/noelle-pre-FT .
+cp ../../../patches/noelle-simplification-FT .
+popd ;
